@@ -1,0 +1,32 @@
+# Git pre-commit hook configuration for Terraform quality and security
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.88.4
+    hooks:
+      # 1. Canonical formatting
+      - id: terraform_fmt
+        args:
+          - --args=-recursive
+
+      # 2. Syntax and internal consistency validation
+      - id: terraform_validate
+
+      # 3. Linting against AWS provider rules
+      - id: terraform_tflint
+        args:
+          - --args=--config=.tflint.hcl
+
+      # 4. Security misconfiguration scanner (Trivy / tfsec)
+      - id: terraform_trivy
+
+      # 5. Policy-as-code and compliance scanner
+      - id: terraform_checkov
+        args:
+          - --args=--config-file=.checkov.yaml
+
+      # 6. Auto-generate markdown documentation for modules
+      - id: terraform_docs
+        args:
+          - --hook-config=--path-to-file=README.md
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=true

@@ -1,0 +1,19 @@
+# Checkov static security analysis configuration
+framework:
+  - terraform
+
+# Fail only on MEDIUM, HIGH, and CRITICAL security vulnerabilities
+soft-fail: false
+compact: true
+quiet: false
+
+# Directory scope
+directory:
+  - modules/
+  - environments/
+
+# Documented suppressions or skips where architectural tradeoffs were made intentionally
+# Example: In dev, skipping WAF association on ALB or single NAT gateway
+skip-check:
+  - CKV_AWS_150 # Deletion protection intentionally disabled in dev environment
+  - CKV_AWS_260 # Ingress port 80 permitted on ALB for HTTP to HTTPS redirection
